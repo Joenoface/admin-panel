@@ -1,258 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MidriftCashier • Admin Control Center</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-    .tab-active { background: linear-gradient(90deg, #008080, #800000); color: white; }
-    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgb(0 128 128 / 0.25); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MidriftCashier • Admin Control Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .tab-active { background: linear-gradient(90deg, #008080, #800000); color: white; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgb(0 128 128 / 0.25); }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-zinc-950 via-teal-950 to-zinc-950 text-white min-h-screen">
 
-<div class="flex h-screen">
-  <!-- SIDEBAR -->
-  <div class="w-72 bg-black/60 border-r border-white/10 p-6 flex flex-col">
-    <div class="flex items-center gap-3 mb-12">
-      <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-maroon-500 rounded-2xl flex items-center justify-center text-2xl">💰</div>
-      <div>
-        <h1 class="text-3xl font-bold tracking-tighter">MIDRIFT</h1>
-        <p class="text-xs text-teal-400 -mt-1">CASHIER</p>
-      </div>
-    </div>
-
-    <button onclick="switchTab(0)" class="tab-btn tab-active flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-tachometer-alt w-5"></i> Dashboard</button>
-    <button onclick="switchTab(1)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-users w-5"></i> Cashiers</button>
-    <button onclick="switchTab(2)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-list-check w-5"></i> All Sales</button>
-    <button onclick="switchTab(3)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-lightbulb w-5"></i> Smart Insights</button>
-    <button onclick="switchTab(4)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-download w-5"></i> Export & Backup</button>
-
-    <div class="mt-auto pt-8 border-t border-white/10">
-      <div class="glass p-5 rounded-3xl text-xs">
-        <div class="font-semibold text-teal-400 mb-3">DEVELOPER</div>
-        <div class="space-y-2 text-white/70">
-          <div><i class="fas fa-phone"></i> 0110922897</div>
-          <div><i class="fas fa-envelope"></i> josephkoinange717@gmail.com</div>
-          <a href="https://joenoface.github.io/NangaNet/" target="_blank" class="block hover:text-white transition">🌐 joenoface.github.io/NangaNet</a>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="flex items-center justify-center min-h-screen p-6">
+    <div class="glass w-full max-w-md p-10 rounded-3xl">
+        <div class="flex items-center gap-3 mb-10 justify-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-maroon-500 rounded-2xl flex items-center justify-center text-4xl">💰</div>
+            <div>
+                <h1 class="text-4xl font-bold tracking-tighter">MIDRIFT</h1>
+                <p class="text-xs text-teal-400 -mt-1">CASHIER • ADMIN</p>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+        <h2 class="text-3xl font-bold text-center mb-2">Admin Control Center</h2>
+        <p class="text-center text-white/60 mb-8">Sign in with your admin credentials</p>
 
-  <!-- MAIN CONTENT -->
-  <div class="flex-1 overflow-auto">
-    <!-- HEADER -->
-    <div class="border-b border-white/10 p-6 flex justify-between items-center bg-black/40">
-      <h2 id="pageTitle" class="text-3xl font-bold">Control Center</h2>
-      <div class="flex items-center gap-4">
-        <button onclick="logout()" class="px-6 py-2.5 bg-red-500/20 hover:bg-red-500/30 rounded-2xl text-red-400 text-sm font-medium">LOGOUT</button>
-      </div>
-    </div>
+        <div class="space-y-6">
+            <input id="loginUsername" placeholder="Username"
+                   class="w-full p-4 rounded-2xl bg-white/10 border border-white/20 focus:border-teal-400 outline-none text-white placeholder:text-white/50">
+            <input id="loginPassword" type="password" placeholder="Password"
+                   class="w-full p-4 rounded-2xl bg-white/10 border border-white/20 focus:border-teal-400 outline-none text-white placeholder:text-white/50">
 
-    <!-- TAB CONTENTS -->
-    <div id="tab0" class="tab-content p-8">
-      <div class="grid grid-cols-4 gap-6" id="kpi"></div>
-      <div class="grid grid-cols-12 gap-6 mt-8">
-        <div class="col-span-8 glass rounded-3xl p-8"><canvas id="trendChart"></canvas></div>
-        <div class="col-span-4 glass rounded-3xl p-8"><canvas id="pieChart"></canvas></div>
-      </div>
-    </div>
+            <button onclick="performLogin()"
+                    class="w-full py-4 bg-gradient-to-r from-teal-500 to-maroon-500 rounded-2xl font-semibold text-lg hover:scale-105 transition flex items-center justify-center gap-2">
+                <i class="fas fa-shield-alt"></i> LOGIN SECURELY
+            </button>
+        </div>
 
-    <div id="tab1" class="tab-content hidden p-8">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl font-semibold">Cashier Management</h3>
-        <button onclick="showAddUserModal()" class="bg-teal-600 px-6 py-3 rounded-2xl flex items-center gap-2"><i class="fas fa-plus"></i> Add Cashier</button>
-      </div>
-      <div class="glass rounded-3xl overflow-hidden" id="usersTable"></div>
-    </div>
+        <div id="loginError" class="hidden mt-6 text-red-400 text-center text-sm bg-red-500/10 p-3 rounded-2xl"></div>
 
-    <div id="tab2" class="tab-content hidden p-8">
-      <h3 class="text-2xl font-semibold mb-6">All Sales Records</h3>
-      <div class="glass rounded-3xl overflow-hidden">
-        <table class="w-full" id="salesTable"></table>
-      </div>
+        <p class="text-center text-xs text-white/40 mt-8">Need credentials? Contact the developer</p>
     </div>
+</div>
 
-    <div id="tab3" class="tab-content hidden p-8">
-      <h3 class="text-2xl font-semibold mb-6">Smart Insights & AI Analysis</h3>
-      <div id="insights" class="space-y-6"></div>
-    </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+    <div class="flex h-screen">
+        <!-- SIDEBAR -->
+        <div class="w-72 bg-black/60 border-r border-white/10 p-6 flex flex-col">
+            <div class="flex items-center gap-3 mb-12">
+                <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-maroon-500 rounded-2xl flex items-center justify-center text-2xl">💰</div>
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tighter">MIDRIFT</h1>
+                    <p class="text-xs text-teal-400 -mt-1">CASHIER</p>
+                </div>
+            </div>
 
-    <div id="tab4" class="tab-content hidden p-8">
-      <h3 class="text-2xl font-semibold mb-6">Export & Backup</h3>
-      <div class="grid grid-cols-3 gap-6">
-        <button onclick="exportCSV()" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
-          <i class="fas fa-file-csv text-6xl mb-4 text-teal-400"></i>
-          <span class="text-xl font-semibold">Download CSV</span>
-          <span class="text-sm text-teal-300">All sales data</span>
-        </button>
-        <button onclick="alert('PDF Report generation coming in next update ✅')" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
-          <i class="fas fa-file-pdf text-6xl mb-4 text-red-400"></i>
-          <span class="text-xl font-semibold">Generate PDF Report</span>
-        </button>
-        <button onclick="alert('Full database backup initiated ✅\nCheck email for link')" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
-          <i class="fas fa-cloud-download-alt text-6xl mb-4 text-purple-400"></i>
-          <span class="text-xl font-semibold">Backup Database</span>
-        </button>
-      </div>
+            <button onclick="switchTab(0)" class="tab-btn tab-active flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-tachometer-alt w-5"></i> Dashboard</button>
+            <button onclick="switchTab(1)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-users w-5"></i> Cashiers</button>
+            <button onclick="switchTab(2)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-list-check w-5"></i> All Sales</button>
+            <button onclick="switchTab(3)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-lightbulb w-5"></i> Smart Insights</button>
+            <button onclick="switchTab(4)" class="tab-btn flex items-center gap-4 px-6 py-4 rounded-3xl mb-2 text-left w-full"><i class="fas fa-download w-5"></i> Export & Backup</button>
+
+            <div class="mt-auto pt-8 border-t border-white/10">
+                <div class="glass p-5 rounded-3xl text-xs">
+                    <div class="font-semibold text-teal-400 mb-3">DEVELOPER</div>
+                    <div class="space-y-2 text-white/70">
+                        <div><i class="fas fa-phone"></i> 0110922897</div>
+                        <div><i class="fas fa-envelope"></i> josephkoinange717@gmail.com</div>
+                        <a href="https://joenoface.github.io/NangaNet/" target="_blank" class="block hover:text-white transition">🌐 joenoface.github.io/NangaNet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 overflow-auto">
+            <!-- HEADER -->
+            <div class="border-b border-white/10 p-6 flex justify-between items-center bg-black/40">
+                <h2 id="pageTitle" class="text-3xl font-bold">Control Center</h2>
+                <div class="flex items-center gap-4">
+                    <button onclick="logout()" class="px-6 py-2.5 bg-red-500/20 hover:bg-red-500/30 rounded-2xl text-red-400 text-sm font-medium">LOGOUT</button>
+                </div>
+            </div>
+
+            <!-- DASHBOARD TAB - NOW FULL OF LIVE DATA, FIGURES & CHARTS -->
+            <div id="tab0" class="tab-content p-8">
+                <!-- 5 LIVE KPIs -->
+                <div class="grid grid-cols-5 gap-6" id="kpi"></div>
+
+                <!-- RECENT ACTIVITY -->
+                <div class="mt-10">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-semibold">Recent Activity</h3>
+                        <button onclick="switchTab(2)" class="text-teal-400 hover:underline text-sm flex items-center gap-1">
+                            View all sales <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="glass rounded-3xl overflow-hidden max-h-80 overflow-y-auto" id="recentTable"></div>
+                </div>
+
+                <!-- CHARTS ROW -->
+                <div class="grid grid-cols-12 gap-6 mt-10">
+                    <!-- TREND LINE CHART -->
+                    <div class="col-span-8 glass rounded-3xl p-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-chart-line text-teal-400"></i> Variance Trend (Last 7 Days)
+                        </h3>
+                        <canvas id="trendChart" height="120"></canvas>
+                    </div>
+
+                    <!-- PIE CHART -->
+                    <div class="col-span-4 glass rounded-3xl p-8">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-chart-pie text-purple-400"></i> Variance Status
+                        </h3>
+                        <canvas id="pieChart" height="220"></canvas>
+                    </div>
+                </div>
+
+                <!-- CASHIER BAR CHART -->
+                <div class="mt-8 glass rounded-3xl p-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-users text-blue-400"></i> Variance by Cashier
+                    </h3>
+                    <canvas id="cashierBarChart" height="140"></canvas>
+                </div>
+            </div>
+
+            <!-- OTHER TABS (unchanged) -->
+            <div id="tab1" class="tab-content hidden p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold">Cashier Management</h3>
+                    <button onclick="showAddUserModal()" class="bg-teal-600 px-6 py-3 rounded-2xl flex items-center gap-2"><i class="fas fa-plus"></i> Add Cashier</button>
+                </div>
+                <div class="glass rounded-3xl overflow-hidden" id="usersTable"></div>
+            </div>
+
+            <div id="tab2" class="tab-content hidden p-8">
+                <h3 class="text-2xl font-semibold mb-6">All Sales Records</h3>
+                <div class="glass rounded-3xl overflow-hidden">
+                    <table class="w-full" id="salesTable"></table>
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content hidden p-8">
+                <h3 class="text-2xl font-semibold mb-6">Smart Insights & AI Analysis</h3>
+                <div id="insights" class="space-y-6"></div>
+            </div>
+
+            <div id="tab4" class="tab-content hidden p-8">
+                <h3 class="text-2xl font-semibold mb-6">Export & Backup</h3>
+                <div class="grid grid-cols-3 gap-6">
+                    <button onclick="exportCSV()" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
+                        <i class="fas fa-file-csv text-6xl mb-4 text-teal-400"></i>
+                        <span class="text-xl font-semibold">Download CSV</span>
+                        <span class="text-sm text-teal-300">All sales data</span>
+                    </button>
+                    <button onclick="alert('PDF Report generation coming in next update ✅')" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
+                        <i class="fas fa-file-pdf text-6xl mb-4 text-red-400"></i>
+                        <span class="text-xl font-semibold">Generate PDF Report</span>
+                    </button>
+                    <button onclick="alert('Full database backup initiated ✅\nCheck email for link')" class="glass h-52 rounded-3xl flex flex-col items-center justify-center hover:scale-105 transition">
+                        <i class="fas fa-cloud-download-alt text-6xl mb-4 text-purple-400"></i>
+                        <span class="text-xl font-semibold">Backup Database</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Add User Modal -->
 <div id="addUserModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center">
-  <div class="glass w-96 p-8 rounded-3xl">
-    <h3 class="text-2xl font-bold mb-6">Add New Cashier</h3>
-    <input id="newUsername" placeholder="Username" class="w-full p-4 rounded-2xl bg-white/10 mb-4">
-    <input id="newFullname" placeholder="Full Name" class="w-full p-4 rounded-2xl bg-white/10 mb-4">
-    <input id="newPassword" type="password" placeholder="Password" class="w-full p-4 rounded-2xl bg-white/10 mb-6">
-    <div class="flex gap-4">
-      <button onclick="hideModal()" class="flex-1 py-4 rounded-2xl border border-white/30">Cancel</button>
-      <button onclick="createUser()" class="flex-1 py-4 bg-teal-600 rounded-2xl">Create User</button>
+    <div class="glass w-96 p-8 rounded-3xl">
+        <h3 class="text-2xl font-bold mb-6">Add New Cashier</h3>
+        <input id="newUsername" placeholder="Username" class="w-full p-4 rounded-2xl bg-white/10 mb-4">
+        <input id="newFullname" placeholder="Full Name" class="w-full p-4 rounded-2xl bg-white/10 mb-4">
+        <input id="newPassword" type="password" placeholder="Password" class="w-full p-4 rounded-2xl bg-white/10 mb-6">
+        <div class="flex gap-4">
+            <button onclick="hideModal()" class="flex-1 py-4 rounded-2xl border border-white/30">Cancel</button>
+            <button onclick="createUser()" class="flex-1 py-4 bg-teal-600 rounded-2xl">Create User</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-  // ==================== CONFIG ====================
-  const baseUrl = "https://midriftcashier-backend.onrender.com";
-  let token = localStorage.getItem("adminToken");
+    // ==================== CONFIG ====================
+    const baseUrl = "https://midriftcashier-backend.onrender.com";
+    let token = localStorage.getItem("adminToken");
 
-  // ==================== TAB SWITCHING ====================
-  function switchTab(n) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    document.getElementById(`tab${n}`).classList.remove('hidden');
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
-    document.querySelectorAll('.tab-btn')[n].classList.add('tab-active');
-  }
+    // ==================== TAB SWITCHING ====================
+    function switchTab(n) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab${n}`).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
+      document.querySelectorAll('.tab-btn')[n].classList.add('tab-active');
+    }
 
-  // ==================== AUTH ====================
-  if (!token) {
-    alert("Please login as admin first in the app or use your admin credentials");
-    window.location.href = "login-test.html"; // fallback
-  } else {
-    loadAllData();
-  }
+    // ==================== AUTH & LOGIN ====================
+    async function performLogin() {
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const errorDiv = document.getElementById("loginError");
 
-  // ==================== LOAD ALL DATA ====================
-  async function loadAllData() {
-    await loadDashboard();
-    await loadUsers();
-    await loadSales();
-    await loadInsights();
-  }
+      errorDiv.classList.add("hidden");
+      if (!username || !password) {
+        errorDiv.textContent = "Username and password are required";
+        errorDiv.classList.remove("hidden");
+        return;
+      }
 
-  async function loadDashboard() {
-    const res = await fetch(baseUrl + "/admin/stats", { headers: { Authorization: `Bearer ${token}` } });
-    const { data } = await res.json();
+      try {
+        const res = await fetch(baseUrl + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const result = await res.json();
 
-    document.getElementById("kpi").innerHTML = `
-      <div class="glass p-8 rounded-3xl card-hover">
-        <div class="text-5xl font-bold text-teal-400">${data.totalVariance.toFixed(2)}</div>
-        <div class="text-sm text-teal-300">TOTAL VARIANCE</div>
-      </div>
-      <div class="glass p-8 rounded-3xl card-hover">
-        <div class="text-5xl font-bold text-red-400">${data.shortDays}</div>
-        <div class="text-sm text-red-300">SHORT DAYS</div>
-      </div>
-      <div class="glass p-8 rounded-3xl card-hover">
-        <div class="text-5xl font-bold">${data.totalSales}</div>
-        <div class="text-sm text-white/70">TOTAL ENTRIES</div>
-      </div>
-      <div class="glass p-8 rounded-3xl card-hover">
-        <div class="text-5xl font-bold text-purple-400">${data.avgVariance}</div>
-        <div class="text-sm text-purple-300">AVG VARIANCE</div>
-      </div>
-    `;
+        if (res.ok && (result.token || (result.data && result.data.token))) {
+          const newToken = result.token || result.data.token;
+          localStorage.setItem("adminToken", newToken);
+          token = newToken;
 
-    // Trend Chart
-    new Chart(document.getElementById("trendChart"), {
-      type: 'line',
-      data: { labels: ['Week 1','Week 2','Week 3','Week 4'], datasets: [{ label: 'Variance Trend', data: [data.totalVariance*0.6, data.totalVariance*1.1, data.totalVariance*0.8, data.totalVariance], borderColor: '#00ffaa', tension: 0.4, borderWidth: 5 }] },
-      options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.1)' } } } }
-    });
-  }
+          document.getElementById("loginScreen").classList.add("hidden");
+          document.getElementById("dashboard").classList.remove("hidden");
 
-  async function loadUsers() {
-    const res = await fetch(baseUrl + "/admin/users", { headers: { Authorization: `Bearer ${token}` } });
-    const { data } = await res.json();
-    let html = `<table class="w-full"><thead class="bg-white/10"><tr><th class="p-6 text-left">Name</th><th class="p-6 text-left">Username</th><th class="p-6 text-left">Role</th><th class="p-6 text-left">Joined</th><th class="p-6"></th></tr></thead><tbody>`;
-    data.forEach(u => {
-      html += `<tr class="border-t border-white/10"><td class="p-6">${u.full_name}</td><td class="p-6">${u.username}</td><td class="p-6"><span class="px-4 py-1 rounded-full bg-teal-900 text-teal-300 text-xs">${u.role}</span></td><td class="p-6 text-white/60">${u.created_at.split('T')[0]}</td><td class="p-6"><button onclick="deleteUser(${u.id})" class="text-red-400 hover:text-red-300">Delete</button></td></tr>`;
-    });
-    html += `</tbody></table>`;
-    document.getElementById("usersTable").innerHTML = html;
-  }
+          await loadAllData();
+          switchTab(0);
+        } else {
+          errorDiv.textContent = result.message || result.error || "Invalid admin credentials";
+          errorDiv.classList.remove("hidden");
+        }
+      } catch (err) {
+        errorDiv.textContent = "Cannot connect to server. Check your internet or backend status.";
+        errorDiv.classList.remove("hidden");
+      }
+    }
 
-  async function loadSales() {
-    const res = await fetch(baseUrl + "/admin/sales", { headers: { Authorization: `Bearer ${token}` } });
-    const { data } = await res.json();
-    let html = `<table class="w-full"><thead class="bg-white/10"><tr><th class="p-6 text-left">Date</th><th class="p-6 text-left">Cashier</th><th class="p-6 text-left">Cash Sales</th><th class="p-6 text-left">Variance</th></tr></thead><tbody>`;
-    data.forEach(s => {
-      const color = s.variance >= 0 ? 'text-green-400' : 'text-red-400';
-      html += `<tr class="border-t border-white/10"><td class="p-6">${s.sale_date}</td><td class="p-6">${s.full_name}</td><td class="p-6 font-mono">${s.cash_sales}</td><td class="p-6 font-bold ${color}">${s.variance}</td></tr>`;
-    });
-    html += `</tbody></table>`;
-    document.getElementById("salesTable").innerHTML = html;
-  }
+    if (token) {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      loadAllData();
+    } else {
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("dashboard").classList.add("hidden");
+    }
 
-  async function loadInsights() {
-    const res = await fetch(baseUrl + "/admin/stats", { headers: { Authorization: `Bearer ${token}` } });
-    const { data } = await res.json();
-    document.getElementById("insights").innerHTML = `
-      <div class="glass p-10 rounded-3xl">
-        <h4 class="text-xl font-semibold mb-4 text-teal-400">AI SMART ANALYSIS</h4>
-        <p class="text-lg leading-relaxed">${data.insight}</p>
-        <div class="mt-8 text-sm text-white/60">Recommendation: Schedule training for cashiers with more than 3 short days this month.</div>
-      </div>
-    `;
-  }
+    // ==================== LOAD ALL DATA ====================
+    async function loadAllData() {
+      await loadDashboard();
+      await loadUsers();
+      await loadSales();
+      await loadInsights();
+    }
 
-  function showAddUserModal() {
-    document.getElementById("addUserModal").classList.remove("hidden");
-  }
+    // ==================== DASHBOARD - FULL OF LIVE DATA & CHARTS ====================
+    async function loadDashboard() {
+      // 1. Get aggregate stats
+      const statsRes = await fetch(baseUrl + "/admin/stats", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const statsJson = await statsRes.json();
+      const stats = statsJson.data;
 
-  function hideModal() {
-    document.getElementById("addUserModal").classList.add("hidden");
-  }
+      // 5 KPI cards (live numbers from your database)
+      document.getElementById("kpi").innerHTML = `
+        <div class="glass p-8 rounded-3xl card-hover">
+          <div class="text-5xl font-bold text-teal-400">${stats.totalVariance.toFixed(2)}</div>
+          <div class="text-sm text-teal-300">TOTAL VARIANCE</div>
+        </div>
+        <div class="glass p-8 rounded-3xl card-hover">
+          <div class="text-5xl font-bold text-red-400">${stats.shortDays}</div>
+          <div class="text-sm text-red-300">SHORT DAYS</div>
+        </div>
+        <div class="glass p-8 rounded-3xl card-hover">
+          <div class="text-5xl font-bold">${stats.totalSales}</div>
+          <div class="text-sm text-white/70">TOTAL ENTRIES</div>
+        </div>
+        <div class="glass p-8 rounded-3xl card-hover">
+          <div class="text-5xl font-bold text-purple-400">${stats.avgVariance}</div>
+          <div class="text-sm text-purple-300">AVG VARIANCE</div>
+        </div>
+        <div class="glass p-8 rounded-3xl card-hover">
+          <div class="text-5xl font-bold text-blue-400">${stats.totalCash.toFixed(2)}</div>
+          <div class="text-sm text-blue-300">TOTAL CASH SALES</div>
+        </div>
+      `;
 
-  async function createUser() {
-    const username = document.getElementById("newUsername").value;
-    const full_name = document.getElementById("newFullname").value;
-    const password = document.getElementById("newPassword").value;
-    await fetch(baseUrl + "/admin/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ username, full_name, password, role: "cashier" })
-    });
-    hideModal();
-    loadUsers();
-  }
+      // 2. Get full sales data for charts + recent table
+      const salesRes = await fetch(baseUrl + "/admin/sales", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      let sales = (await salesRes.json()).data || [];
 
-  async function deleteUser(id) {
-    if (confirm("Delete this cashier permanently?")) {
-      await fetch(baseUrl + "/admin/users/" + id, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      // RECENT ACTIVITY TABLE (live last 5 entries)
+      const sortedDesc = [...sales].sort((a, b) => new Date(b.sale_date) - new Date(a.sale_date));
+      let recentHtml = `<table class="w-full"><thead class="bg-white/10"><tr><th class="p-4 text-left">Date</th><th class="p-4 text-left">Cashier</th><th class="p-4 text-left">Cash Sales</th><th class="p-4 text-left">Variance</th></tr></thead><tbody>`;
+      sortedDesc.slice(0, 5).forEach(s => {
+        const color = parseFloat(s.variance) >= 0 ? 'text-green-400' : 'text-red-400';
+        recentHtml += `<tr class="border-t border-white/10"><td class="p-4">${s.sale_date}</td><td class="p-4">${s.full_name}</td><td class="p-4 font-mono">${parseFloat(s.cash_sales).toFixed(2)}</td><td class="p-4 font-bold ${color}">${parseFloat(s.variance).toFixed(2)}</td></tr>`;
+      });
+      recentHtml += `</tbody></table>`;
+      document.getElementById("recentTable").innerHTML = recentHtml || "<p class='p-8 text-center text-white/50'>No sales recorded yet</p>";
+
+      // 3. TREND LINE CHART - Real last 7 days (sum variance per day)
+      const sortedAsc = [...sales].sort((a, b) => new Date(a.sale_date) - new Date(b.sale_date));
+      const uniqueDates = [...new Set(sortedAsc.map(s => s.sale_date))].slice(-7);
+      const dailyVarianceData = uniqueDates.map(date => {
+        return sales.filter(s => s.sale_date === date)
+          .reduce((sum, s) => sum + parseFloat(s.variance || 0), 0);
+      });
+
+      const trendCtx = document.getElementById("trendChart").getContext('2d');
+      new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: uniqueDates.length ? uniqueDates : ['No data'],
+          datasets: [{
+            label: 'Daily Variance',
+            data: dailyVarianceData,
+            borderColor: '#00ffaa',
+            tension: 0.4,
+            borderWidth: 5,
+            pointBackgroundColor: '#fff'
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: 'rgba(255,255,255,0.1)' } },
+            x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+          }
+        }
+      });
+
+      // 4. PIE CHART - SHORT / OVER / BALANCED distribution
+      const shortCount = sales.filter(s => parseFloat(s.variance) < 0).length;
+      const overCount = sales.filter(s => parseFloat(s.variance) > 0).length;
+      const balancedCount = sales.filter(s => parseFloat(s.variance) === 0).length;
+
+      const pieCtx = document.getElementById("pieChart").getContext('2d');
+      new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+          labels: ['SHORT', 'OVER', 'BALANCED'],
+          datasets: [{
+            data: [shortCount, overCount, balancedCount],
+            backgroundColor: ['#ef4444', '#22c55e', '#64748b'],
+            borderColor: 'rgba(255,255,255,0.3)',
+            borderWidth: 3
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#fff', font: { size: 14 } } }
+          }
+        }
+      });
+
+      // 5. BAR CHART - Variance per cashier
+      const cashierMap = {};
+      sales.forEach(s => {
+        const name = s.full_name;
+        cashierMap[name] = (cashierMap[name] || 0) + parseFloat(s.variance || 0);
+      });
+      const barLabels = Object.keys(cashierMap);
+      const barData = Object.values(cashierMap);
+      const barColors = barData.map(v => v >= 0 ? '#22c55e' : '#ef4444');
+
+      const barCtx = document.getElementById("cashierBarChart").getContext('2d');
+      new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: barLabels.length ? barLabels : ['No data'],
+          datasets: [{
+            label: 'Total Variance',
+            data: barData,
+            backgroundColor: barColors,
+            borderRadius: 12
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: 'rgba(255,255,255,0.1)' } },
+            x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+          }
+        }
+      });
+    }
+
+    // ==================== OTHER FUNCTIONS (unchanged) ====================
+    async function loadUsers() {
+      const res = await fetch(baseUrl + "/admin/users", { headers: { Authorization: `Bearer ${token}` } });
+      const { data } = await res.json();
+      let html = `<table class="w-full"><thead class="bg-white/10"><tr><th class="p-6 text-left">Name</th><th class="p-6 text-left">Username</th><th class="p-6 text-left">Role</th><th class="p-6 text-left">Joined</th><th class="p-6"></th></tr></thead><tbody>`;
+      data.forEach(u => {
+        html += `<tr class="border-t border-white/10"><td class="p-6">${u.full_name}</td><td class="p-6">${u.username}</td><td class="p-6"><span class="px-4 py-1 rounded-full bg-teal-900 text-teal-300 text-xs">${u.role}</span></td><td class="p-6 text-white/60">${u.created_at.split('T')[0]}</td><td class="p-6"><button onclick="deleteUser(${u.id})" class="text-red-400 hover:text-red-300">Delete</button></td></tr>`;
+      });
+      html += `</tbody></table>`;
+      document.getElementById("usersTable").innerHTML = html;
+    }
+
+    async function loadSales() {
+      const res = await fetch(baseUrl + "/admin/sales", { headers: { Authorization: `Bearer ${token}` } });
+      const { data } = await res.json();
+      let html = `<table class="w-full"><thead class="bg-white/10"><tr><th class="p-6 text-left">Date</th><th class="p-6 text-left">Cashier</th><th class="p-6 text-left">Cash Sales</th><th class="p-6 text-left">Variance</th></tr></thead><tbody>`;
+      data.forEach(s => {
+        const color = s.variance >= 0 ? 'text-green-400' : 'text-red-400';
+        html += `<tr class="border-t border-white/10"><td class="p-6">${s.sale_date}</td><td class="p-6">${s.full_name}</td><td class="p-6 font-mono">${s.cash_sales}</td><td class="p-6 font-bold ${color}">${s.variance}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      document.getElementById("salesTable").innerHTML = html;
+    }
+
+    async function loadInsights() {
+      const res = await fetch(baseUrl + "/admin/stats", { headers: { Authorization: `Bearer ${token}` } });
+      const { data } = await res.json();
+      document.getElementById("insights").innerHTML = `
+        <div class="glass p-10 rounded-3xl">
+          <h4 class="text-xl font-semibold mb-4 text-teal-400">AI SMART ANALYSIS</h4>
+          <p class="text-lg leading-relaxed">${data.insight}</p>
+          <div class="mt-8 text-sm text-white/60">Recommendation: Schedule training for cashiers with more than 3 short days this month.</div>
+        </div>
+      `;
+    }
+
+    function showAddUserModal() {
+      document.getElementById("addUserModal").classList.remove("hidden");
+    }
+
+    function hideModal() {
+      document.getElementById("addUserModal").classList.add("hidden");
+    }
+
+    async function createUser() {
+      const username = document.getElementById("newUsername").value;
+      const full_name = document.getElementById("newFullname").value;
+      const password = document.getElementById("newPassword").value;
+      await fetch(baseUrl + "/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ username, full_name, password, role: "cashier" })
+      });
+      hideModal();
       loadUsers();
     }
-  }
 
-  function exportCSV() {
-    window.open(baseUrl + "/admin/export/csv", "_blank");
-  }
+    async function deleteUser(id) {
+      if (confirm("Delete this cashier permanently?")) {
+        await fetch(baseUrl + "/admin/users/" + id, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+        loadUsers();
+      }
+    }
 
-  function logout() {
-    localStorage.clear();
-    window.location.reload();
-  }
+    function exportCSV() {
+      window.open(baseUrl + "/admin/export/csv", "_blank");
+    }
 
-  // Initialize
-  switchTab(0);
+    function logout() {
+      localStorage.clear();
+      token = null;
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+    }
+
+    if (token) switchTab(0);
 </script>
 </body>
 </html>
